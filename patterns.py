@@ -16,9 +16,9 @@ def check_LCS_svo(tree,tkE1,tkE2):
             lemma = tree.get_lemma(lcs).lower()
             if lemma in ['diminish','augment','exhibit','experience','counteract','potentiate','enhance','reduce','antagonize'] :
                return 'effect'
-            if lemma in ['impair','inhibit','displace','accelerate','bind','induce','decrease','elevate','delay'] :
+            if lemma in ['impair','inhibit','displace','accelerate','bind','induce','decrease','elevate','delay', 'cause', 'show'] :
                return 'mechanism'
-            if lemma in ['exceed'] :
+            if lemma in ['exceed', 'caution'] :
                return 'advise'
             if lemma in ['suggest'] :
                return 'int'
@@ -42,14 +42,30 @@ def check_wib(tree,tkE1,tkE2,entities,e1,e2):
          # if the token is in between both entities
          if r1 < l and r < l2:
             lemma = tree.get_lemma(t).lower()
-            if lemma in ['tendency','stimulate','regulate','prostate','modification','augment','accentuate','exacerbate'] :
+            if lemma in ['tendency','stimulate','regulate','prostate','modification','augment','accentuate','exacerbate', 'effect'] :
                return 'effect'
-            if lemma in ['react','faster','presumably','induction','substantially','minimally'] :
+            if lemma in ['react','faster','presumably','induction','substantially','minimally', 'concentration'] :
                return 'mechanism'
-            if lemma in ['exceed','extreme','cautiously']:
+            if lemma in ['exceed','extreme','cautiously', 'should']:
                return 'advise'
             if lemma in ['interact'] :
                return 'int'
 
+   return None
+
+
+## -- check pattern:  LCS of both entities is a verb with a should child and return ’advise’ if it is
+def check_LCS_haschild_advise(tree,tkE1,tkE2):
+
+   if tkE1 is not None and tkE2 is not None:
+      lcs = tree.get_LCS(tkE1,tkE2)
+
+      if tree.get_tag(lcs)[0:2] == "VB":
+         children = tree.get_children(lcs)
+         for child in children:
+            lemma = tree.get_lemma(child).lower()
+            if lemma in ['should']:
+               return 'advise' 
+            
    return None
 
