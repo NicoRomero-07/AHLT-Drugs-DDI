@@ -26,6 +26,10 @@ def check_interaction(tree, entities, e1, e2) :
    p = patterns.check_wib(tree,tkE1,tkE2,entities,e1,e2)
    if p is not None: return p
 
+   p = patterns.check_LCS_haschild_advise(tree,tkE1,tkE2)
+   if p is not None: return p
+
+
    ## add more patterns to improve performance
    # p = patterns.check_XXXX(tree,tkE1,tkE2,...)
    # if p is not None: return p
