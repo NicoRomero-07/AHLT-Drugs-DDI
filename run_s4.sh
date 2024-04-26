@@ -21,7 +21,7 @@ echo "Running MEM model..."
 python3 predict.py features/devel.feat model.mem > results/devel-MEM.out
 # evaluate MEM results
 echo "Evaluating MEM results..."
-python3 $AHLT/util/evaluator.py DDI $AHLT/data/devel devel-MEM.out > results/devel-MEM.stats
+python3 $AHLT/util/evaluator.py DDI $AHLT/data/devel results/devel-MEM.out > results/devel-MEM.stats
 
 # train SVM model
 echo "Training SVM model..."
