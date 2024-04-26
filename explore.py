@@ -7,8 +7,6 @@ from os import listdir
 from xml.dom.minidom import parse
 
 from deptree import *
-
-
 # -----------------
 # check pattern:  LCS is a verb, one entity is under its "nsubj" and the other under its "obj"
 def check_pattern_LCS_svo(tree,entities,e1,e2):

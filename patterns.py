@@ -16,9 +16,9 @@ def check_LCS_svo(tree,tkE1,tkE2):
             lemma = tree.get_lemma(lcs).lower()
             if lemma in ['diminish','augment','exhibit','experience','counteract','potentiate','enhance','reduce','antagonize'] :
                return 'effect'
-            if lemma in ['impair','inhibit','displace','accelerate','bind','induce','decrease','elevate','delay'] :
+            if lemma in ['impair','inhibit','displace','accelerate','bind','induce','decrease','elevate','delay', 'cause', 'show'] :
                return 'mechanism'
-            if lemma in ['exceed'] :
+            if lemma in ['exceed', 'should'] :
                return 'advise'
             if lemma in ['suggest'] :
                return 'int'
@@ -44,12 +44,11 @@ def check_wib(tree,tkE1,tkE2,entities,e1,e2):
             lemma = tree.get_lemma(t).lower()
             if lemma in ['tendency','stimulate','regulate','prostate','modification','augment','accentuate','exacerbate'] :
                return 'effect'
-            if lemma in ['react','faster','presumably','induction','substantially','minimally'] :
+            if lemma in ['react','faster','presumably','induction','substantially','minimally','concentration'] :
                return 'mechanism'
-            if lemma in ['exceed','extreme','cautiously']:
+            if lemma in ['exceed','extreme','cautiously','should']:
                return 'advise'
             if lemma in ['interact'] :
                return 'int'
 
    return None
-
