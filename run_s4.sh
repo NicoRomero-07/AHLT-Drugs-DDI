@@ -15,20 +15,20 @@ kill `cat /tmp/corenlp-server.running`
 
 # train MEM model
 echo "Training MEM model..."
-python3 train.py features/train.feat model.mem C=10
+python3 train.py features/train.feat models/model.mem C=10
 # run MEM model
 echo "Running MEM model..."
-python3 predict.py features/devel.feat model.mem > results/devel-MEM.out
+python3 predict.py features/devel.feat models/model.mem > results/devel-MEM.out
 # evaluate MEM results
 echo "Evaluating MEM results..."
 python3 $AHLT/util/evaluator.py DDI $AHLT/data/devel results/devel-MEM.out > results/devel-MEM.stats
 
 # train SVM model
 echo "Training SVM model..."
-python3 train.py features/train.feat model.svm C=10
+python3 train.py features/train.feat models/model.svm C=10
 # run SVM model
 echo "Running SVM model..."
-python3 predict.py features/devel.feat model.svm > results/devel-SVM.out
+python3 predict.py features/devel.feat models/model.svm > results/devel-SVM.out
 # evaluate SVM results
 echo "Evaluating SVM results..."
 python3 $AHLT/util/evaluator.py DDI $AHLT/data/devel results/devel-SVM.out > results/devel-SVM.stats
