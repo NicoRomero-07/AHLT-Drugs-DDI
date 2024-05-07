@@ -36,10 +36,41 @@ def extract_features(tree, entities, e1, e2) :
             feats.add("lib=" + lemma)
             feats.add("wib=" + word)
             feats.add("lpib=" + lemma + "_" + tag)
-            
+
             # feature indicating the presence of an entity in between E1 and E2
             if tree.is_entity(tk, entities) :
                feats.add("eib")
+
+
+      # features for tokens before tkE1
+      for tk in range(tkE1):
+         if not tree.is_stopword(tk):
+            word  = tree.get_word(tk)
+            lemma = tree.get_lemma(tk).lower()
+            tag = tree.get_tag(tk)
+            feats.add("l_before=" + lemma)
+            feats.add("w_before=" + word)
+            feats.add("lp_before=" + lemma + "_" + tag)
+
+            # entity before tkE1
+            if tree.is_entity(tk, entities):
+               feats.add("ebf")
+
+
+      # features for tokens after tkE2
+      for tk in range(tkE2, tree.get_n_nodes()):
+         if not tree.is_stopword(tk):
+            word  = tree.get_word(tk)
+            lemma = tree.get_lemma(tk).lower()
+            tag = tree.get_tag(tk)
+            feats.add("l_after=" + lemma)
+            feats.add("w_after=" + word)
+            feats.add("lp_after=" + lemma + "_" + tag)
+
+            # entity after E2
+            if tree.is_entity(tk, entities):
+               feats.add("eaf")
+
 
       # features about paths in the tree
       lcs = tree.get_LCS(tkE1,tkE2)
@@ -58,6 +89,83 @@ def extract_features(tree, entities, e1, e2) :
       lemma = patterns.check_LCS_svo(tree,tkE1,tkE2)
       if lemma is not None:
          feats.add("LCS_svo="+lemma)
+
+
+
+      # features about the LCS
+      lcs = tree.get_LCS(tkE1,tkE2)
+
+      word  = tree.get_word(lcs)
+      lemma = tree.get_lemma(lcs).lower()
+      tag = tree.get_tag(lcs)
+      rel = tree.get_rel(lcs)
+      feats.add("LCS_w=" + word)
+      feats.add("LCS_l=" + lemma)
+      feats.add("LCS_tag=" + tag)
+      feats.add("LCS_rel=" + rel)
+      feats.add("LCS_ l_t=" + lemma + "_" + tag)
+
+      # LCS is entity
+      if tree.is_entity(lcs, entities):
+         feats.add("lcs_entity")
+      
+      # LCS is ROOT
+      if lcs == "ROOT":
+         feats.add("lcs_root")
+
+
+
+      # features about parent entities
+      p1 = tree.get_parent(tkE1)
+      p2 = tree.get_parent(tkE2)
+
+      # parents of the entities
+      if p1 is not None:
+         lemma = tree.get_lemma(p1).lower()
+         tag = tree.get_tag(p1)
+         feats.add("lemma_p1=" + lemma)
+         feats.add("tag_p1=" + tag) 
+      if p2 is not None:
+         lemma = tree.get_lemma(p2).lower()
+         tag = tree.get_tag(p2)
+         feats.add("lemma_p2=" + lemma)
+         feats.add("tag_p2=" + tag) 
+
+      # same entities in the pair
+      if tree.get_lemma(tkE1) == tree.get_lemma(tkE2):
+         feats.add("same_lemma")
+
+      # one entity under the other
+      if tkE2 == tree.get_parent(tkE1):
+         feats.add("e1_under_e2")
+      if tkE1 == tree.get_parent(tkE2):
+         feats.add("e2_under_e1")
+
+      # same parent
+      if p1 == p2 and (p1 is not None):
+         tag = tree.get_tag(p1)
+         feats.add("same_parent_tag=" + tag) 
+
+
+      # # num of tokens in between
+      # feats.add("ntokens_in_bt="+str(tkE2 - tkE1))
+
+      # # features for tkE1
+      # feats.add('tkE1_word='+tree.get_word(tkE1))
+      # feats.add('tkE1_lemma='+tree.get_lemma(tkE1).lower())
+      # feats.add('tkE1_tag='+tree.get_tag(tkE1))
+      # feats.add('tkE1_word_lenght'+str(len(tree.get_word(tkE1))))
+      # feats.add('tkE1_lemma_lenght'+str(len(tree.get_lemma(tkE1))))
+
+      # # features for tkE2
+      # feats.add('tkE2_word='+tree.get_word(tkE2))
+      # feats.add('tkE2_lemma='+tree.get_lemma(tkE2).lower())
+      # feats.add('tkE2_tag='+tree.get_tag(tkE2))
+      # feats.add('tkE2_word_lenght'+str(len(tree.get_word(tkE2))))
+      # feats.add('tkE2_lemma_lenght'+str(len(tree.get_lemma(tkE2))))
+
+
+
       
    return feats
 
